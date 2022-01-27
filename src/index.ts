@@ -1,10 +1,10 @@
 import express, { Request, Response } from 'express'
 import path from 'path'
-// import { promises as fsPromises } from 'fs'
-// import { Buffer } from 'buffer'
 
+import resizeImage from './controller/imageProcessorConroller'
 import logger from './middlewares/logger'
 import { imagePreviewValidator, imagePreviewRule } from './middlewares/imagePreviewValidator'
+import { imageResizeValidator, imageResizeRule } from './middlewares/imageResizeValidator'
 
 const app = express()
 const port = 3000
@@ -15,13 +15,6 @@ const viewsPath = '/views'
 app.use(express.static(path.join(__dirname, publicPath)))
 app.set('views', path.join(__dirname, viewsPath))
 app.set('view engine', 'ejs')
-// const readFullImage = async () => {
-//   const buffer = Buffer.alloc(6000)
-//   const fullImagePath = `${imagesPath}/encenadaport.jpg`
-//   const fullImageFile = await fsPromises.open(fullImagePath, 'a+')
-//   await fullImageFile.read(buffer, 0, 6000)
-//   console.log(fullImageFile)
-// }
 
 app.get(
   '/preview',
@@ -40,6 +33,32 @@ app.get(
     }
   }
 )
+
+app.get(
+  '/resize',
+  imageResizeRule(),
+  imageResizeValidator,
+  logger,
+  async (req: Request, res: Response) => {
+    const imageFile: string = req.query.filename as string
+    const imageWidth: number = req.query.width as unknown as number
+    const imageHeight: number = req.query.height as unknown as number
+
+    await resizeImage(imageFile, imageWidth, imageHeight)
+
+    try {
+      res.render('thumbnail', {
+        thumbnail: `${imageFile}.jpg`,
+        width: `${imageWidth}`,
+        height: `${imageHeight}`,
+        error: false
+      })
+    } catch (error) {
+      throw new Error(`Error ${(error as Error).message}`)
+    }
+  }
+)
+
 app.listen(port, () => {
   console.log(`listening to port number ${port}`)
 })

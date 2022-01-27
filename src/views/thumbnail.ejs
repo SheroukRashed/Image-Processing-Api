@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device">
+        <title>EgFwd Image Processing API Project</title>
+    </head>
+    <body>
+        <header>
+            <h1>This is the processed image after resizing</h1>
+        </header>
+        <main>
+            <% if (thumbnail) { %> 
+                <img src="http://localhost:3000/images/<%= thumbnail %>" alt="resize-<%= thumbnail %>" width="<%= width %>" height="<%= height %>">
+            <% } %>
+        </main>
+        <footer>
+            <% if (error) { %> 
+                <p><%= status %></p>
+                <p><%= error %></p>
+            <% } %>
+        </footer>
+    </body>
+</html>

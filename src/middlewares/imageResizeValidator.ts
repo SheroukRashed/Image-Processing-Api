@@ -39,8 +39,8 @@ const imageResizeValidator = (req: express.Request, res: express.Response, next:
   if (errors.isEmpty()) {
     return next()
   }
-  return res.render('original', {
-    original: false,
+  return res.render('thumbnail', {
+    thumbnail: false,
     status: 'Error while resizing the image',
     error: errors.array({ onlyFirstError: true })
   })
