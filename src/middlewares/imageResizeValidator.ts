@@ -1,5 +1,5 @@
 import { query, ValidationError, validationResult } from 'express-validator'
-import express from 'express'
+import express, { NextFunction } from 'express'
 
 const fileslist = ['encenadaport', 'fjord', 'icelandwaterfall', 'palmtunnel', 'santamonica']
 
@@ -33,21 +33,17 @@ const imageResizeRule = () => [
     )
 ]
 
-const imageResizeValidator = (
-  req: express.Request,
-  res: express.Response,
-  next: Function
-): void => {
+const imageResizeValidator = (req: express.Request, res: express.Response, next: NextFunction) => {
   const errorFormatter = ({ msg }: ValidationError) => `${msg}`
   const errors = validationResult(req).formatWith(errorFormatter)
   if (errors.isEmpty()) {
-    next()
-  } else {
-    res.json({
-      status: 'Error while previewing the image',
-      errors: errors.array({ onlyFirstError: true })
-    })
+    return next()
   }
+  return res.render('original', {
+    original: false,
+    status: 'Error while resizing the image',
+    error: errors.array({ onlyFirstError: true })
+  })
 }
 
 export { imageResizeValidator, imageResizeRule }
