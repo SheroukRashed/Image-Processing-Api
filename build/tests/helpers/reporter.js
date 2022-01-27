@@ -1,4 +1,5 @@
 "use strict";
+/* eslint-disable */
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -33,3 +34,4 @@ jasmine.getEnv().addReporter(new jasmine_spec_reporter_1.SpecReporter({
     },
     customProcessors: [CustomProcessor],
 }));
+//# sourceMappingURL=reporter.js.map

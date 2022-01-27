@@ -7,9 +7,16 @@
     <body>
         <header>
             <h1>This is the original image without resizing</h1>
-            <% if (original) { %> 
-            <img src="http://localhost:3000/images/<%= original %>">
-            <% } %>
         </header>
+        <main>
+            <% if (original) { %> 
+                <img src="http://localhost:3000/images/<%= original %>">
+            <% } %>
+        </main>
+        <footer>
+            <% if (error) { %> 
+                <p><%= error.message %></p>
+            <% } %>
+        </footer>
     </body>
 </html>
