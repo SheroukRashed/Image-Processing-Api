@@ -1,7 +1,8 @@
 import express, { Request, Response } from 'express'
 import path from 'path'
 
-import resizeImage from './controller/imageProcessorConroller'
+import resizeImage from './controllers/imageProcessorConroller'
+import isFileExists from './modules/isFileExists'
 import logger from './middlewares/logger'
 import { imagePreviewValidator, imagePreviewRule } from './middlewares/imagePreviewValidator'
 import { imageResizeValidator, imageResizeRule } from './middlewares/imageResizeValidator'
@@ -44,8 +45,14 @@ app.get(
     const imageWidth: number = req.query.width as unknown as number
     const imageHeight: number = req.query.height as unknown as number
 
-    await resizeImage(imageFile, imageWidth, imageHeight)
-
+    const processedImageFilePath: string = path.join(
+      __dirname,
+      publicPath,
+      `thumbnails/${imageFile}_${imageWidth}_${imageHeight}.jpg`
+    )
+    if (!isFileExists(processedImageFilePath)) {
+      await resizeImage(imageFile, imageWidth, imageHeight)
+    }
     try {
       res.render('thumbnail', {
         thumbnail: `${imageFile}.jpg`,
