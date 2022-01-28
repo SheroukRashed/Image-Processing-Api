@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device">
+        <title>EgFwd Image Processing API Project</title>
+    </head>
+    <body>
+        <header>
+            <h1>This is the original image without resizing</h1>
+        </header>
+        <main>
+            <% if (original) { %> 
+                <img src="http://localhost:3000/images/<%= original %>" alt="full-<%= original %>">
+            <% } %>
+        </main>
+        <footer>
+            <% if (error) { %> 
+                <p><%= status %></p>
+                <p><%= error %></p>
+            <% } %>
+        </footer>
+    </body>
+</html>

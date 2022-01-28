@@ -17,7 +17,7 @@ const imagePreviewValidator = (req: express.Request, res: express.Response, next
   if (errors.isEmpty()) {
     return next()
   }
-  return res.render('original', {
+  return res.status(400).render('original', {
     original: false,
     status: 'Error while previewing the image',
     error: errors.array({ onlyFirstError: true })

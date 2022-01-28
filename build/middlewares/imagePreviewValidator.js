@@ -27,14 +27,13 @@ var imagePreviewValidator = function (req, res, next) {
     };
     var errors = (0, express_validator_1.validationResult)(req).formatWith(errorFormatter);
     if (errors.isEmpty()) {
-        next();
+        return next();
     }
-    else {
-        res.json({
-            status: 'Error while previewing the image',
-            errors: errors.array({ onlyFirstError: true })
-        });
-    }
+    return res.status(400).render('original', {
+        original: false,
+        status: 'Error while previewing the image',
+        error: errors.array({ onlyFirstError: true })
+    });
 };
 exports.imagePreviewValidator = imagePreviewValidator;
 //# sourceMappingURL=imagePreviewValidator.js.map

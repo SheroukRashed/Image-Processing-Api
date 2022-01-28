@@ -25,7 +25,7 @@ app.get(
   async (req: Request, res: Response) => {
     const imageFile: string = req.query.filename as string
     try {
-      res.render('original', {
+      res.status(200).render('original', {
         original: `${imageFile}.jpg`,
         error: false
       })
@@ -54,7 +54,7 @@ app.get(
       await resizeImage(imageFile, imageWidth, imageHeight)
     }
     try {
-      res.render('thumbnail', {
+      res.status(200).render('thumbnail', {
         thumbnail: `${imageFile}.jpg`,
         width: `${imageWidth}`,
         height: `${imageHeight}`,

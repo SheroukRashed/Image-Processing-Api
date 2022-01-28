@@ -39,69 +39,30 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var express_1 = __importDefault(require("express"));
+var sharp_1 = __importDefault(require("sharp"));
 var path_1 = __importDefault(require("path"));
-var imageProcessorConroller_1 = __importDefault(require("./controllers/imageProcessorConroller"));
-var isFileExists_1 = __importDefault(require("./modules/isFileExists"));
-var logger_1 = __importDefault(require("./middlewares/logger"));
-var imagePreviewValidator_1 = require("./middlewares/imagePreviewValidator");
-var imageResizeValidator_1 = require("./middlewares/imageResizeValidator");
-var app = (0, express_1.default)();
-var port = 3000;
-var publicPath = '/public';
-var viewsPath = '/views';
-// Configure server
-app.use(express_1.default.static(path_1.default.join(__dirname, publicPath)));
-app.set('views', path_1.default.join(__dirname, viewsPath));
-app.set('view engine', 'ejs');
-app.get('/preview', (0, imagePreviewValidator_1.imagePreviewRule)(), imagePreviewValidator_1.imagePreviewValidator, logger_1.default, function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var imageFile;
-    return __generator(this, function (_a) {
-        imageFile = req.query.filename;
-        try {
-            res.status(200).render('original', {
-                original: "".concat(imageFile, ".jpg"),
-                error: false
-            });
-        }
-        catch (error) {
-            throw new Error("Error ".concat(error.message));
-        }
-        return [2 /*return*/];
-    });
-}); });
-app.get('/resize', (0, imageResizeValidator_1.imageResizeRule)(), imageResizeValidator_1.imageResizeValidator, logger_1.default, function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var imageFile, imageWidth, imageHeight, processedImageFilePath;
+var originalImagesPath = path_1.default.join(__dirname, '../public/images');
+var processedImagesPath = path_1.default.join(__dirname, '../public/thumbnails');
+var resizeImage = function (filename, width, height) { return __awaiter(void 0, void 0, void 0, function () {
+    var originalImagePath, processedImagePath, error_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                imageFile = req.query.filename;
-                imageWidth = req.query.width;
-                imageHeight = req.query.height;
-                processedImageFilePath = path_1.default.join(__dirname, publicPath, "thumbnails/".concat(imageFile, "_").concat(imageWidth, "_").concat(imageHeight, ".jpg"));
-                if (!!(0, isFileExists_1.default)(processedImageFilePath)) return [3 /*break*/, 2];
-                return [4 /*yield*/, (0, imageProcessorConroller_1.default)(imageFile, imageWidth, imageHeight)];
+                originalImagePath = "".concat(originalImagesPath, "/").concat(filename, ".jpg");
+                processedImagePath = "".concat(processedImagesPath, "/").concat(filename, "_").concat(width, "_").concat(height, ".jpg");
+                _a.label = 1;
             case 1:
-                _a.sent();
-                _a.label = 2;
+                _a.trys.push([1, 3, , 4]);
+                return [4 /*yield*/, (0, sharp_1.default)(originalImagePath).resize(width, height).toFile(processedImagePath)];
             case 2:
-                try {
-                    res.status(200).render('thumbnail', {
-                        thumbnail: "".concat(imageFile, ".jpg"),
-                        width: "".concat(imageWidth),
-                        height: "".concat(imageHeight),
-                        error: false
-                    });
-                }
-                catch (error) {
-                    throw new Error("Error ".concat(error.message));
-                }
-                return [2 /*return*/];
+                _a.sent();
+                return [3 /*break*/, 4];
+            case 3:
+                error_1 = _a.sent();
+                throw new Error("Error while processing the image : ".concat(error_1));
+            case 4: return [2 /*return*/];
         }
     });
-}); });
-app.listen(port, function () {
-    console.log("listening to port number ".concat(port));
-});
-exports.default = app;
-//# sourceMappingURL=index.js.map
+}); };
+exports.default = resizeImage;
+//# sourceMappingURL=imageProcessorConroller.js.map
