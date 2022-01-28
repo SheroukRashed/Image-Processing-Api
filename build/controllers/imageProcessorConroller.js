@@ -41,6 +41,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var sharp_1 = __importDefault(require("sharp"));
 var path_1 = __importDefault(require("path"));
+var fs_1 = __importDefault(require("fs"));
 var originalImagesPath = path_1.default.join(__dirname, '../public/images');
 var processedImagesPath = path_1.default.join(__dirname, '../public/thumbnails');
 var resizeImage = function (filename, width, height) { return __awaiter(void 0, void 0, void 0, function () {
@@ -50,6 +51,9 @@ var resizeImage = function (filename, width, height) { return __awaiter(void 0, 
             case 0:
                 originalImagePath = "".concat(originalImagesPath, "/").concat(filename, ".jpg");
                 processedImagePath = "".concat(processedImagesPath, "/").concat(filename, "_").concat(width, "_").concat(height, ".jpg");
+                if (!fs_1.default.existsSync(processedImagesPath)) {
+                    fs_1.default.mkdirSync(processedImagesPath);
+                }
                 _a.label = 1;
             case 1:
                 _a.trys.push([1, 3, , 4]);
