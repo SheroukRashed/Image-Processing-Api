@@ -1,4 +1,4 @@
-import { query, ValidationError, validationResult } from 'express-validator'
+import { query, ValidationChain, ValidationError, validationResult } from 'express-validator'
 import express, { NextFunction } from 'express'
 
 const fileslist = ['encenadaport', 'fjord', 'icelandwaterfall', 'palmtunnel', 'santamonica']
@@ -9,7 +9,7 @@ const maximumFileHeight = 1280
 const minimumFileWidth = 20
 const minimumFileHeight = 20
 
-const imageResizeRule = () => [
+const imageResizeRule = (): ValidationChain[] => [
   query('filename')
     .exists()
     .withMessage('Image file name must be specified in the url')
@@ -33,7 +33,11 @@ const imageResizeRule = () => [
     )
 ]
 
-const imageResizeValidator = (req: express.Request, res: express.Response, next: NextFunction) => {
+const imageResizeValidator = (
+  req: express.Request,
+  res: express.Response,
+  next: NextFunction
+): void => {
   const errorFormatter = ({ msg }: ValidationError) => `${msg}`
   const errors = validationResult(req).formatWith(errorFormatter)
   if (errors.isEmpty()) {

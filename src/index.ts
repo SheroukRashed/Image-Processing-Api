@@ -22,7 +22,7 @@ app.get(
   imagePreviewRule(),
   imagePreviewValidator,
   logger,
-  async (req: Request, res: Response) => {
+  async (req: Request, res: Response): Promise<void> => {
     const imageFile: string = req.query.filename as string
     try {
       res.status(200).render('original', {
@@ -40,7 +40,7 @@ app.get(
   imageResizeRule(),
   imageResizeValidator,
   logger,
-  async (req: Request, res: Response) => {
+  async (req: Request, res: Response): Promise<void> => {
     const imageFile: string = req.query.filename as string
     const imageWidth: number = req.query.width as unknown as number
     const imageHeight: number = req.query.height as unknown as number
@@ -66,7 +66,7 @@ app.get(
   }
 )
 
-app.listen(port, () => {
+app.listen(port, (): void => {
   console.log(`listening to port number ${port}`)
 })
 

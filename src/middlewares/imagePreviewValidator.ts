@@ -1,9 +1,9 @@
-import { query, ValidationError, validationResult } from 'express-validator'
+import { query, ValidationChain, ValidationError, validationResult } from 'express-validator'
 import express, { NextFunction } from 'express'
 
 const fileslist = ['encenadaport', 'fjord', 'icelandwaterfall', 'palmtunnel', 'santamonica']
 
-const imagePreviewRule = () => [
+const imagePreviewRule = (): ValidationChain[] => [
   query('filename')
     .exists()
     .withMessage('Image file name must be specified in the url')
@@ -11,7 +11,11 @@ const imagePreviewRule = () => [
     .withMessage(`Image file must be one of these files: ${[...fileslist]}`)
 ]
 
-const imagePreviewValidator = (req: express.Request, res: express.Response, next: NextFunction) => {
+const imagePreviewValidator = (
+  req: express.Request,
+  res: express.Response,
+  next: NextFunction
+): void => {
   const errorFormatter = ({ msg }: ValidationError) => `${msg}`
   const errors = validationResult(req).formatWith(errorFormatter)
   if (errors.isEmpty()) {

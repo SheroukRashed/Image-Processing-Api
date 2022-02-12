@@ -2,7 +2,7 @@ import fs from 'fs'
 
 const isFileExists = (filename: string): boolean => {
   try {
-    if (fs.existsSync(filename)) {
+    if (fs.readFileSync(filename)) {
       return true
     }
   } catch (error) {

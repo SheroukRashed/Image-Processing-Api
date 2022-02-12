@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var fs_1 = __importDefault(require("fs"));
 var isFileExists = function (filename) {
     try {
-        if (fs_1.default.existsSync(filename)) {
+        if (fs_1.default.readFileSync(filename)) {
             return true;
         }
     }
